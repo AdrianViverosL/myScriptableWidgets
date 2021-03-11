@@ -322,7 +322,7 @@ async function fetchBlynk(token){
   return {
       device : data.devices[0].boardType,
       connectionType : data.devices[0].connectionType,
-      temperature : data.widgets[0].value,
+      temperature : Math.round(data.widgets[0].value * 100) / 100,
       humidity : data.widgets[1].value,
       devBattery : data.widgets[2].value,
       sceneStatus : data.widgets[3].value
