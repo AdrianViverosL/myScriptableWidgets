@@ -2,16 +2,17 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: deep-blue; icon-glyph: magic;
 
-
+//Collection of Colors used in the widget style
 const COLORS = {
     blynk : '#2edbad',
     bg1 : '#29323c',
     bg2 : '#1c1c1c'
 }
+
 const token = "ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD"
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
-//widget.backgroundColor = new Color('#7ccfaf')
+
 if (!config.runsInWidget){
     await widget.presentSmall()
 }
@@ -38,22 +39,31 @@ async function createWidget(data){
     widget.backgroundGradient = bgColor;
     //widget.addSpacer(5)
 
+
+    const timeFormatter = new DateFormatter();
+    timeFormatter.locale = "en";
+    timeFormatter.useNoDateStyle();
+    timeFormatter.useShortTimeStyle();
+
     const title = widget.addText("Blynk")
     title.font = Font.boldSystemFont(24)
     title.textColor = new Color(COLORS.blynk)
-    widget.addSpacer(10)
-    /*
-    const deviceLine = widget.addText(`${data.device} on  ${data.connectionType}`)
-    deviceLine.font = Font.boldSystemFont(12)
-    deviceLine.textColor = Color.white()
+    widget.addSpacer(5)
     
+    
+    const dateLine = widget.addText(`${timeFormatter.string(new Date())}`);
+    dateLine.font = Font.boldSystemFont(10)
+    dateLine.textColor = Color.white();
+    dateLine.textOpacity = 0.7;
+    
+    /*    
     const battLine = widget.addText(`Battery: ${data.devBattery}%`)
     battLine.font = Font.boldSystemFont(12)
     battLine.textColor = Color.white()
     */
 
     const tempLine = widget.addText(`${data.temperature}ºC`)
-    tempLine.font = Font.regularSystemFont(30)
+    tempLine.font = Font.regularSystemFont(33)
     tempLine.textColor = Color.white()
 
     const tempLabel = widget.addText(`Temperature`)
@@ -62,9 +72,13 @@ async function createWidget(data){
 
     widget.addSpacer(10)
 
-    const deviceLine = widget.addText(`${data.device} on  ${data.connectionType}`)
+    const deviceLine = widget.addText(`${data.device}`)
     deviceLine.font = Font.mediumSystemFont(12)
     deviceLine.textColor = Color.white()
+
+    const connectionLine = widget.addText(`${data.connectionType} at home`)
+    connectionLine.font = Font.mediumSystemFont(12)
+    connectionLine.textColor = Color.white()
     /*
     const humLine = widget.addText(`Humidity: ${data.humidity}%`)
     humLine.font = Font.boldSystemFont(12)
