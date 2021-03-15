@@ -5,4 +5,4 @@ Another feature added in this version is the connectivity with Blynk App, which 
 
 Here is an example. 
 
-![alt text](https://github.com/AdrianViverosL/myScriptableWidgets/myTerm/blob/master/example.jpg?raw=true)
+![alt text](https://github.com/AdrianViverosL/myScriptableWidgets/blob/master/myTerm/example.jpg?raw=true)
