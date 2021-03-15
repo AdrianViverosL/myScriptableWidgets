@@ -9,7 +9,7 @@ const COLORS = {
     bg2 : '#1c1c1c'
 }
 
-const token = "ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD"
+const token = " "  //Enter your token here
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
 
