@@ -24,7 +24,7 @@ const COLORS = {
 // TODO: PLEASE SET THESE VALUES
 const NAME = 'AdsLuqs';
 const WEATHER_API_KEY = '91018fb22d9890c759d5976103700b8d';
-const BLYNK_API_KEY = 'ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD';
+const BLYNK_API_KEY = "Enter your Blynk's token here";
 const WORK_CALENDAR_NAME = 'TEC';
 const PERSONAL_CALENDAR_NAME = 'Personal';
 //const PERIOD_CALENDAR_NAME = 'Mexican Holidays';
