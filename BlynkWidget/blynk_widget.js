@@ -9,16 +9,24 @@ const COLORS = {
     bg2 : '#1c1c1c'
 }
 
-const token = " "  //Enter your token here
+const token = "ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD"
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
 
-if (!config.runsInWidget){
-    await widget.presentSmall()
-}
+config.widgetFamily = config.widgetFamily || 'medium'
 
-Script.setWidget(widget)
-Script.complete()
+if (!config.runsInWidget){
+    //await widget.presentSmall()
+    switch(config.widgetFamily){
+        case 'small' : await widget.presentSmall(); break;
+        case 'medium' : await widget.presentMedium(); break;
+        case 'large' : await widget.presentLarge(); break;
+    }
+}else{
+    //Display the widget
+    Script.setWidget(widget)
+    Script.complete()
+}
 
 /******************************************************************************
  * Main Functions (Widget and Data-Fetching)
@@ -39,19 +47,29 @@ async function createWidget(data){
     widget.backgroundGradient = bgColor;
     //widget.addSpacer(5)
 
-
     const timeFormatter = new DateFormatter();
     timeFormatter.locale = "en";
     timeFormatter.useNoDateStyle();
     timeFormatter.useShortTimeStyle();
 
-    const title = widget.addText("Blynk")
+    let row = widget.addStack()
+    row.layoutHorizontally()
+
+    titleColumn = row.addStack()
+    titleColumn.layoutVertically()
+    titleColumn.centerAlignContent()
+
+
+    const title = titleColumn.addText("Blynk")
     title.font = Font.boldSystemFont(24)
     title.textColor = new Color(COLORS.blynk)
-    widget.addSpacer(5)
+    //widget.addSpacer(5)
     
+    dateColumn = row.addStack()
+    dateColumn.layoutVertically()
+    dateColumn.centerAlignContent()
     
-    const dateLine = widget.addText(`${timeFormatter.string(new Date())}`);
+    const dateLine = dateColumn.addText(`${timeFormatter.string(new Date())}`);
     dateLine.font = Font.boldSystemFont(10)
     dateLine.textColor = Color.white();
     dateLine.textOpacity = 0.7;
@@ -61,17 +79,41 @@ async function createWidget(data){
     battLine.font = Font.boldSystemFont(12)
     battLine.textColor = Color.white()
     */
+    
 
-    const tempLine = widget.addText(`${data.temperature}ºC`)
+    tempColumn = row.addStack()
+    tempColumn.layoutVertically()
+    tempColumn.centerAlignContent()
+
+    //const tempLine = widget.addText(`${data.temperature}ºC`)
+    const tempLine = tempColumn.addText(`${data.temperature}ºC`)
     tempLine.font = Font.regularSystemFont(33)
     tempLine.textColor = Color.white()
 
-    const tempLabel = widget.addText(`Temperature`)
+    //const tempLabel = widget.addText(`Temperature`)
+    const tempLabel = tempColumn.addText(`Temperature`)
     tempLabel.font = Font.lightSystemFont(12)
     tempLabel.textColor = Color.white()
 
-    widget.addSpacer(10)
+    row.addSpacer(20)
+    
+    humColumn = row.addStack()
+    humColumn.layoutVertically()
+    humColumn.centerAlignContent()
 
+    const humLine = humColumn.addText(`${data.humidity}%`)
+    humLine.font = Font.regularSystemFont(33)
+    humLine.textColor = Color.white()
+
+    const humLabel = humColumn.addText(`Humidity`)
+    humLabel.font = Font.lightSystemFont(12)
+    humLabel.textColor = Color.white()
+
+    const deviceLine = widget.addText(`${data.device} on ${data.connectionType} at home`)
+    deviceLine.font = Font.mediumSystemFont(12)
+    deviceLine.textColor = Color.white()
+
+    /** 
     const deviceLine = widget.addText(`${data.device}`)
     deviceLine.font = Font.mediumSystemFont(12)
     deviceLine.textColor = Color.white()
@@ -79,6 +121,7 @@ async function createWidget(data){
     const connectionLine = widget.addText(`${data.connectionType} at home`)
     connectionLine.font = Font.mediumSystemFont(12)
     connectionLine.textColor = Color.white()
+    **/
     /*
     const humLine = widget.addText(`Humidity: ${data.humidity}%`)
     humLine.font = Font.boldSystemFont(12)
