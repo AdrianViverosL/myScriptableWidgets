@@ -45,42 +45,34 @@ async function createWidget(data){
     bgColor.colors = [new Color(COLORS.bg1), new Color(COLORS.bg2)]
     bgColor.locations = [0.0, 1.0]
     widget.backgroundGradient = bgColor;
-    //widget.addSpacer(5)
-
+    
     const timeFormatter = new DateFormatter();
     timeFormatter.locale = "en";
     timeFormatter.useNoDateStyle();
     timeFormatter.useShortTimeStyle();
 
-    let row = widget.addStack()
-    row.layoutHorizontally()
-
-    titleColumn = row.addStack()
-    titleColumn.layoutVertically()
-    titleColumn.centerAlignContent()
-
-
-    const title = titleColumn.addText("Blynk")
+    let titleRow = widget.addStack() //create a row for the title info
+    titleRow.centerAlignContent()
+    const title = titleRow.addText("Blynk")
     title.font = Font.boldSystemFont(24)
     title.textColor = new Color(COLORS.blynk)
-    //widget.addSpacer(5)
+    titleRow.addSpacer(180)
     
-    dateColumn = row.addStack()
-    dateColumn.layoutVertically()
-    dateColumn.centerAlignContent()
-    
-    const dateLine = dateColumn.addText(`${timeFormatter.string(new Date())}`);
+    const dateLine = titleRow.addText(`${timeFormatter.string(new Date())}`);
     dateLine.font = Font.boldSystemFont(10)
     dateLine.textColor = Color.white();
     dateLine.textOpacity = 0.7;
+    //dateLine.centerAlignText()
     
+    widget.addSpacer(8)
     /*    
     const battLine = widget.addText(`Battery: ${data.devBattery}%`)
     battLine.font = Font.boldSystemFont(12)
     battLine.textColor = Color.white()
     */
-    
 
+    let row = widget.addStack() //Create a row of columns
+    //Create temperatue column & set its properties
     tempColumn = row.addStack()
     tempColumn.layoutVertically()
     tempColumn.centerAlignContent()
@@ -95,8 +87,8 @@ async function createWidget(data){
     tempLabel.font = Font.lightSystemFont(12)
     tempLabel.textColor = Color.white()
 
-    row.addSpacer(20)
-    
+    row.addSpacer(100)    
+    //Create humidity column & set its properties
     humColumn = row.addStack()
     humColumn.layoutVertically()
     humColumn.centerAlignContent()
@@ -108,11 +100,13 @@ async function createWidget(data){
     const humLabel = humColumn.addText(`Humidity`)
     humLabel.font = Font.lightSystemFont(12)
     humLabel.textColor = Color.white()
-
+    
+    widget.addSpacer(10)
+    
     const deviceLine = widget.addText(`${data.device} on ${data.connectionType} at home`)
     deviceLine.font = Font.mediumSystemFont(12)
     deviceLine.textColor = Color.white()
-
+    
     /** 
     const deviceLine = widget.addText(`${data.device}`)
     deviceLine.font = Font.mediumSystemFont(12)
@@ -122,11 +116,6 @@ async function createWidget(data){
     connectionLine.font = Font.mediumSystemFont(12)
     connectionLine.textColor = Color.white()
     **/
-    /*
-    const humLine = widget.addText(`Humidity: ${data.humidity}%`)
-    humLine.font = Font.boldSystemFont(12)
-    humLine.textColor = Color.white()
-    */
     return widget
 }
 
