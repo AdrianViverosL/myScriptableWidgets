@@ -19,7 +19,7 @@ if(widgetInputRAW !== null){
     size = 'small'
 }
 */
-const token = "ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD"
+const token = " "
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
 
