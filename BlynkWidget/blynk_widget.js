@@ -8,22 +8,11 @@ const COLORS = {
     bg1 : '#29323c',
     bg2 : '#1c1c1c'
 }
-/** 
-let widgetInputRAW = args.widgetParameter
-let widgetInput = null;
-let size
-if(widgetInputRAW !== null){
-    const parameter = widgetInputRAW.toString()
-    size = parameter
-}else{
-    size = 'small'
-}
-*/
-const token = "ENTER YOUR TOKEN"        //Put your personal token here!!
+
+const token = "ENTER YOUR BLYNK API TOKEN HERE!!"
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
-
-config.widgetFamily = config.widgetFamily || 'medium'
+//config.widgetFamily = config.widgetFamily || 'medium'
 
 if (!config.runsInWidget){
     //await widget.presentSmall()
@@ -39,100 +28,139 @@ if (!config.runsInWidget){
 }
 
 /******************************************************************************
- * Main Functions (Widget and Data-Fetching)
+ * Functions (Widget and Data-Fetching)
  *****************************************************************************/
 
 /**
- * Main widget function.
+ * Create widget function.
  * 
  * @param {} data The data for the widget to display
  */
 
 async function createWidget(data){
-    const widget = new ListWidget()
-    widget.setPadding(10,10,10,10)
-    const bgColor = new LinearGradient()
-    bgColor.colors = [new Color(COLORS.bg1), new Color(COLORS.bg2)]
-    bgColor.locations = [0.0, 1.0]
-    widget.backgroundGradient = bgColor;
-        
-    const timeFormatter = new DateFormatter();
-    timeFormatter.locale = "en";
-    timeFormatter.useNoDateStyle();
-    timeFormatter.useShortTimeStyle();
+    let widgetSize = config.widgetFamily    //Retrieves the size of the widget
+    if(widgetSize == 'medium'){
+        const widget = new ListWidget()
+        widget.setPadding(10,10,10,10)
+        const bgColor = new LinearGradient()
+        bgColor.colors = [new Color(COLORS.bg1), new Color(COLORS.bg2)]
+        bgColor.locations = [0.0, 1.0]
+        widget.backgroundGradient = bgColor;
+            
+        const timeFormatter = new DateFormatter();
+        timeFormatter.locale = "en";
+        timeFormatter.useNoDateStyle();
+        timeFormatter.useShortTimeStyle();
 
-    let titleRow = widget.addStack() //create a row for the title info
-    titleRow.centerAlignContent()
-    const title = titleRow.addText("Blynk")
-    title.font = Font.boldSystemFont(24)
-    title.textColor = new Color(COLORS.blynk)
-    titleRow.addSpacer()
-        
-    const dateLine = titleRow.addText(`${timeFormatter.string(new Date())}`);
-    dateLine.font = Font.boldSystemFont(10)
-    dateLine.textColor = Color.white();
-    dateLine.textOpacity = 0.7;
-    //dateLine.leftAlignText()
-        
-    widget.addSpacer(8)
+        let titleRow = widget.addStack() //create a row for the title info
+        titleRow.centerAlignContent()
+        const title = titleRow.addText("Blynk")
+        title.font = Font.boldSystemFont(24)
+        title.textColor = new Color(COLORS.blynk)
+        titleRow.addSpacer()
+            
+        const dateLine = titleRow.addText(`${timeFormatter.string(new Date())}`);
+        dateLine.font = Font.boldSystemFont(10)
+        dateLine.textColor = Color.white();
+        dateLine.textOpacity = 0.7;
+            
+        widget.addSpacer(8)
 
-    let row = widget.addStack() //Create a row of columns
+        let row = widget.addStack() //Create a row of columns
 
-    batteryColumn = row.addStack()
-    batteryColumn.layoutVertically()
-    batteryColumn.centerAlignContent()
+        batteryColumn = row.addStack()
+        batteryColumn.layoutVertically()
+        batteryColumn.centerAlignContent()
 
-    const batteryLine = batteryColumn.addText(`${data.devBattery}%`)
-    batteryLine.font = Font.regularSystemFont(33)
-    batteryLine.textColor = Color.white()
+        const batteryLine = batteryColumn.addText(`${data.devBattery}%`)
+        batteryLine.font = Font.regularSystemFont(33)
+        batteryLine.textColor = Color.white()
 
-    const batteryLabel = batteryColumn.addText(`Battery`)
-    batteryLabel.font = Font.lightSystemFont(12)
-    batteryLabel.textColor = Color.white()
+        const batteryLabel = batteryColumn.addText(`Battery`)
+        batteryLabel.font = Font.lightSystemFont(12)
+        batteryLabel.textColor = Color.white()
 
-    row.addSpacer()
+        row.addSpacer()
 
-    //Create temperatue column & set its properties
-    tempColumn = row.addStack()
-    tempColumn.layoutVertically()
-    tempColumn.centerAlignContent()
+        //Create temperatue column & set its properties
+        tempColumn = row.addStack()
+        tempColumn.layoutVertically()
+        tempColumn.centerAlignContent()
 
-    //const tempLine = widget.addText(`${data.temperature}ºC`)
-    const tempLine = tempColumn.addText(`${data.temperature}ºC`)
-    tempLine.font = Font.regularSystemFont(33)
+        const tempLine = tempColumn.addText(`${data.temperature}ºC`)
+        tempLine.font = Font.regularSystemFont(33)
+            tempLine.textColor = Color.white()
+
+        const tempLabel = tempColumn.addText(`Temperature`)
+        tempLabel.font = Font.lightSystemFont(12)
+        tempLabel.textColor = Color.white()
+
+        row.addSpacer()    
+    //      Create humidity column & set its properties
+        humColumn = row.addStack()
+        humColumn.layoutVertically()
+        humColumn.centerAlignContent()
+
+        const humLine = humColumn.addText(`${data.humidity}%`)
+        humLine.font = Font.regularSystemFont(33)
+        humLine.textColor = Color.white()
+
+        const humLabel = humColumn.addText(`     Humidity`)
+        humLabel.font = Font.lightSystemFont(12)
+        humLabel.textColor = Color.white()
+        humLabel.leftAlignText()
+            
+        widget.addSpacer(15)
+            
+        const deviceLine = widget.addText(`${data.device} on ${data.connectionType} at home`)
+        deviceLine.font = Font.mediumSystemFont(12)
+        deviceLine.textColor = Color.white()
+            
+        return widget    
+    }else if(widgetSize == 'small'){
+        const widget = new ListWidget()
+        const bgColor = new LinearGradient()
+        bgColor.colors = [new Color(COLORS.bg1), new Color(COLORS.bg2)]
+        bgColor.locations = [0.0, 1.0]
+        widget.backgroundGradient = bgColor;
+
+        const timeFormatter = new DateFormatter();
+        timeFormatter.locale = "en";
+        timeFormatter.useNoDateStyle();
+        timeFormatter.useShortTimeStyle();
+
+        const title = widget.addText("Blynk")
+        title.font = Font.boldSystemFont(24)
+        title.textColor = new Color(COLORS.blynk)
+        widget.addSpacer(5)
+
+        const dateLine = widget.addText(`${timeFormatter.string(new Date())}`);
+        dateLine.font = Font.boldSystemFont(10)
+        dateLine.textColor = Color.white();
+        dateLine.textOpacity = 0.7;
+
+        const tempLine = widget.addText(`${data.temperature}ºC`)
+        tempLine.font = Font.regularSystemFont(33)
         tempLine.textColor = Color.white()
 
-    //const tempLabel = widget.addText(`Temperature`)
-    const tempLabel = tempColumn.addText(`Temperature`)
-    tempLabel.font = Font.lightSystemFont(12)
-    tempLabel.textColor = Color.white()
+        const tempLabel = widget.addText(`Temperature`)
+        tempLabel.font = Font.lightSystemFont(12)
+        tempLabel.textColor = Color.white()
 
-    row.addSpacer()    
-//      Create humidity column & set its properties
-    humColumn = row.addStack()
-    humColumn.layoutVertically()
-    humColumn.centerAlignContent()
+        widget.addSpacer(10)
 
-    const humLine = humColumn.addText(`${data.humidity}%`)
-    humLine.font = Font.regularSystemFont(33)
-    humLine.textColor = Color.white()
+        const deviceLine = widget.addText(`${data.device}`)
+        deviceLine.font = Font.mediumSystemFont(12)
+        deviceLine.textColor = Color.white()
 
-    const humLabel = humColumn.addText(`     Humidity`)
-    humLabel.font = Font.lightSystemFont(12)
-    humLabel.textColor = Color.white()
-    humLabel.leftAlignText()
-        
-    widget.addSpacer(15)
-        
-    const deviceLine = widget.addText(`${data.device} on ${data.connectionType} at home`)
-    deviceLine.font = Font.mediumSystemFont(12)
-    deviceLine.textColor = Color.white()
-        
-    return widget    
+        const connectionLine = widget.addText(`${data.connectionType} at home`)
+        connectionLine.font = Font.mediumSystemFont(12)
+        connectionLine.textColor = Color.white()
+        return widget
+    }else{
+        console.log('Widget size not supported')
+    }
 }
-
-
-
 
 /**
  * This function is used to fetch the current data from the Blynk's API
@@ -141,19 +169,16 @@ async function createWidget(data){
  * @returns an object composed by all relevant data from the device in Blynk's App
  */
 async function fetchBlynk(token){
+    //const req = "http://blynk-cloud.com/ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD/project"
     const req = "http://blynk-cloud.com/" + token + "/project"
     const data = await new Request(req).loadJSON()
 
     return {
         device : data.devices[0].boardType,
         connectionType : data.devices[0].connectionType,
-//        temperature : Math.round(data.widgets[0].value * 100) / 100,
         temperature : Math.round(data.widgets[0].value),
         humidity : data.widgets[1].value,
         devBattery : data.widgets[2].value,
         sceneStatus : data.widgets[3].value
     }
 }
-
-
-  
