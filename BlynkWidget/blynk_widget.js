@@ -8,7 +8,17 @@ const COLORS = {
     bg1 : '#29323c',
     bg2 : '#1c1c1c'
 }
-
+/** 
+let widgetInputRAW = args.widgetParameter
+let widgetInput = null;
+let size
+if(widgetInputRAW !== null){
+    const parameter = widgetInputRAW.toString()
+    size = parameter
+}else{
+    size = 'small'
+}
+*/
 const token = "ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD"
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
@@ -39,13 +49,13 @@ if (!config.runsInWidget){
  */
 
 async function createWidget(data){
-
     const widget = new ListWidget()
+    widget.setPadding(5,22.5,10,10)
     const bgColor = new LinearGradient()
     bgColor.colors = [new Color(COLORS.bg1), new Color(COLORS.bg2)]
     bgColor.locations = [0.0, 1.0]
     widget.backgroundGradient = bgColor;
-    
+        
     const timeFormatter = new DateFormatter();
     timeFormatter.locale = "en";
     timeFormatter.useNoDateStyle();
@@ -56,22 +66,32 @@ async function createWidget(data){
     const title = titleRow.addText("Blynk")
     title.font = Font.boldSystemFont(24)
     title.textColor = new Color(COLORS.blynk)
-    titleRow.addSpacer(180)
-    
+    titleRow.addSpacer()
+        
     const dateLine = titleRow.addText(`${timeFormatter.string(new Date())}`);
     dateLine.font = Font.boldSystemFont(10)
     dateLine.textColor = Color.white();
     dateLine.textOpacity = 0.7;
-    //dateLine.centerAlignText()
-    
+    //dateLine.leftAlignText()
+        
     widget.addSpacer(8)
-    /*    
-    const battLine = widget.addText(`Battery: ${data.devBattery}%`)
-    battLine.font = Font.boldSystemFont(12)
-    battLine.textColor = Color.white()
-    */
 
     let row = widget.addStack() //Create a row of columns
+
+    batteryColumn = row.addStack()
+    batteryColumn.layoutVertically()
+    batteryColumn.centerAlignContent()
+
+    const batteryLine = batteryColumn.addText(`${data.devBattery}%`)
+    batteryLine.font = Font.regularSystemFont(33)
+    batteryLine.textColor = Color.white()
+
+    const batteryLabel = batteryColumn.addText(`Battery`)
+    batteryLabel.font = Font.lightSystemFont(12)
+    batteryLabel.textColor = Color.white()
+
+    row.addSpacer()
+
     //Create temperatue column & set its properties
     tempColumn = row.addStack()
     tempColumn.layoutVertically()
@@ -80,15 +100,15 @@ async function createWidget(data){
     //const tempLine = widget.addText(`${data.temperature}ºC`)
     const tempLine = tempColumn.addText(`${data.temperature}ºC`)
     tempLine.font = Font.regularSystemFont(33)
-    tempLine.textColor = Color.white()
+        tempLine.textColor = Color.white()
 
     //const tempLabel = widget.addText(`Temperature`)
     const tempLabel = tempColumn.addText(`Temperature`)
     tempLabel.font = Font.lightSystemFont(12)
     tempLabel.textColor = Color.white()
 
-    row.addSpacer(100)    
-    //Create humidity column & set its properties
+    row.addSpacer()    
+//      Create humidity column & set its properties
     humColumn = row.addStack()
     humColumn.layoutVertically()
     humColumn.centerAlignContent()
@@ -97,26 +117,18 @@ async function createWidget(data){
     humLine.font = Font.regularSystemFont(33)
     humLine.textColor = Color.white()
 
-    const humLabel = humColumn.addText(`Humidity`)
+    const humLabel = humColumn.addText(`     Humidity`)
     humLabel.font = Font.lightSystemFont(12)
     humLabel.textColor = Color.white()
-    
-    widget.addSpacer(10)
-    
+    humLabel.leftAlignText()
+        
+    widget.addSpacer(15)
+        
     const deviceLine = widget.addText(`${data.device} on ${data.connectionType} at home`)
     deviceLine.font = Font.mediumSystemFont(12)
     deviceLine.textColor = Color.white()
-    
-    /** 
-    const deviceLine = widget.addText(`${data.device}`)
-    deviceLine.font = Font.mediumSystemFont(12)
-    deviceLine.textColor = Color.white()
-
-    const connectionLine = widget.addText(`${data.connectionType} at home`)
-    connectionLine.font = Font.mediumSystemFont(12)
-    connectionLine.textColor = Color.white()
-    **/
-    return widget
+        
+    return widget    
 }
 
 
@@ -136,22 +148,13 @@ async function fetchBlynk(token){
     return {
         device : data.devices[0].boardType,
         connectionType : data.devices[0].connectionType,
-        temperature : Math.round(data.widgets[0].value * 100) / 100,
+//        temperature : Math.round(data.widgets[0].value * 100) / 100,
+        temperature : Math.round(data.widgets[0].value),
         humidity : data.widgets[1].value,
         devBattery : data.widgets[2].value,
         sceneStatus : data.widgets[3].value
     }
 }
 
-/** 
-const token = "ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD"
-const myData = await fetchBlynk(token)
-console.log(myData.device+ " " + myData.connectionType)
-console.log(`Temperature: ${myData.temperature} `)
-console.log(`Humidity: ${myData.humidity} `)
-console.log(`Battery: ${myData.devBattery} `)
-console.log(`Scene: ${myData.sceneStatus} `)
-
-*/
 
   
