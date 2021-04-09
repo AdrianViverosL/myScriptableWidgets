@@ -19,7 +19,7 @@ if(widgetInputRAW !== null){
     size = 'small'
 }
 */
-const token = " "
+const token = "ENTER YOUR TOKEN"        //Put your personal token here!!
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
 
@@ -50,7 +50,7 @@ if (!config.runsInWidget){
 
 async function createWidget(data){
     const widget = new ListWidget()
-    widget.setPadding(5,22.5,10,10)
+    widget.setPadding(10,10,10,10)
     const bgColor = new LinearGradient()
     bgColor.colors = [new Color(COLORS.bg1), new Color(COLORS.bg2)]
     bgColor.locations = [0.0, 1.0]
@@ -141,7 +141,6 @@ async function createWidget(data){
  * @returns an object composed by all relevant data from the device in Blynk's App
  */
 async function fetchBlynk(token){
-    //const req = "http://blynk-cloud.com/ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD/project"
     const req = "http://blynk-cloud.com/" + token + "/project"
     const data = await new Request(req).loadJSON()
 
