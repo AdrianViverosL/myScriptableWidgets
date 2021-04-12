@@ -9,7 +9,7 @@ const COLORS = {
     bg2 : '#1c1c1c'
 }
 
-const token = "ENTER YOUR BLYNK API TOKEN HERE!!"
+const token = "TOKEN"  //ENTER YOUR BLYNK'S TOKEN HERE!
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
 //config.widgetFamily = config.widgetFamily || 'medium'
@@ -169,16 +169,22 @@ async function createWidget(data){
  * @returns an object composed by all relevant data from the device in Blynk's App
  */
 async function fetchBlynk(token){
-    //const req = "http://blynk-cloud.com/ztbiefZ3q7ToS4JnT6auO-I8-8GYy6tD/project"
-    const req = "http://blynk-cloud.com/" + token + "/project"
-    const data = await new Request(req).loadJSON()
-
-    return {
-        device : data.devices[0].boardType,
-        connectionType : data.devices[0].connectionType,
-        temperature : Math.round(data.widgets[0].value),
-        humidity : data.widgets[1].value,
-        devBattery : data.widgets[2].value,
-        sceneStatus : data.widgets[3].value
+    try{
+        const req = "http://blynk-cloud.com/" + token + "/project"
+        const data = await new Request(req).loadJSON()
+        
+        return {
+            device : data.devices[0].boardType,
+            connectionType : data.devices[0].connectionType,
+            temperature : Math.round(data.widgets[0].value),
+            humidity : data.widgets[1].value,
+            devBattery : data.widgets[2].value,
+            sceneStatus : data.widgets[3].value
+        }
     }
+    catch(err){
+        console.log("Request fail")
+    }
+   
+    
 }
