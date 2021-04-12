@@ -14,7 +14,7 @@ This script has the ability to detect the widget size selected by the user, ther
     - Medium Size
     In this case, the widget has three rows to display variables. This iteration shows the battery level, temperature, and humidity for each column. The spacing between each column is done automatically by the function ``` addSpacer() ``` which creates the best fit for these amount of information in a row. 
 
-    ![alt text](https://github.com/AdrianViverosL/myScriptableWidgets/blob/main/BlynkWidget/medium.jpeg?raw=true)
+    ![alt text](https://github.com/AdrianViverosL/myScriptableWidgets/blob/main/BlynkWidget/medium.jpg?raw=true)
 
 Both size versions share common things or labels, like the title, last update hour, device, and connection method. Those are displayed at the top and bottom of the canvas. 
 
