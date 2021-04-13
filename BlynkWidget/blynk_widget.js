@@ -9,13 +9,12 @@ const COLORS = {
     bg2 : '#1c1c1c'
 }
 
-const token = "TOKEN"  //ENTER YOUR BLYNK'S TOKEN HERE!
+const token = args.widgetParameter    //Pass the API token through the WidgetParameter
 const myData = await fetchBlynk(token)
 let widget = await createWidget(myData)
 //config.widgetFamily = config.widgetFamily || 'medium'
 
 if (!config.runsInWidget){
-    //await widget.presentSmall()
     switch(config.widgetFamily){
         case 'small' : await widget.presentSmall(); break;
         case 'medium' : await widget.presentMedium(); break;
